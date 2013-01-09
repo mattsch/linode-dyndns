@@ -20,6 +20,7 @@ from StringIO import StringIO
 APIKEY = 'ENTER API KEY HERE'
 DOMAIN = 'YOUR DOMAIN HERE'
 RECORD = 'HOST TO BE UPDATED'
+USERAGENT = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:14.0) Gecko/20100101 Firefox/14.0.1'
 CHECKIP = { "http://automation.whatismyip.com/n09230945.asp" ,
             "http://checkip.dyndns.org:8245/" }
 
@@ -29,6 +30,7 @@ def get_external_ip():
     for each in CHECKIP:
         html = StringIO()
         curl = pycurl.Curl()
+        curl.setopt(curl.USERAGENT, USERAGENT)
         curl.setopt(curl.URL, each)
         curl.setopt(curl.WRITEFUNCTION, html.write)
         curl.perform()
@@ -69,5 +71,5 @@ def set_dns_target(utarget, udomain=DOMAIN, urecord=RECORD):
 if __name__ == '__main__':
     external_ip = get_external_ip()
     if external_ip:
-        print "set_dns_target(%s, DOMAIN, RECORD)" % external_ip
+        print "set_dns_target(%s, %s, %s)" % ( external_ip, DOMAIN, RECORD )
         #set_dns_target(external_ip, DOMAIN, RECORD)
